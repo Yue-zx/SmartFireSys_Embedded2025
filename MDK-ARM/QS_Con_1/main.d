@@ -43,3 +43,4 @@ qs_con_1\main.o: ../Drivers/Hardware/Servo.h
 qs_con_1\main.o: ../Drivers/Hardware/Pump.h
 qs_con_1\main.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdio.h
 qs_con_1\main.o: ../Drivers/Hardware/PID.h
+qs_con_1\main.o: ../Drivers/Hardware/DHT11.h

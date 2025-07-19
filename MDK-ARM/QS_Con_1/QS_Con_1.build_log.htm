@@ -21,24 +21,30 @@ Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.1.0
 Dialog DLL:      TCM.DLL V1.32.0.0
  
 <h2>Project:</h2>
-C:\Users\YueZX\OneDrive\Desktop\QS\QS_Con_1 - 副本 - 副本 - 副本 - 副本 - 副本 - 副本\MDK-ARM\QS_Con_1.uvprojx
-Project File Date:  07/10/2025
+E:\学习\竞赛\嵌赛\智能灭火系统\SmartFireSys_Embedded2025\MDK-ARM\QS_Con_1.uvprojx
+Project File Date:  07/19/2025
 
 <h2>Output:</h2>
 *** Using Compiler 'V5.06 update 5 (build 528)', folder: 'D:\keil5\ARM\ARMCC\Bin'
 Build target 'QS_Con_1'
-compiling PID.c...
-..\Drivers\Hardware\Pump.h(10): warning:  #1295-D: Deprecated declaration Pump_ON - give arg types
+compiling main.c...
+../Drivers/Hardware/Servo.h(10): warning:  #1295-D: Deprecated declaration Servo_Start - give arg types
+  void Servo_Start();
+../Drivers/Hardware/Pump.h(10): warning:  #1295-D: Deprecated declaration Pump_ON - give arg types
   void Pump_ON();
-..\Drivers\Hardware\Pump.h(11): warning:  #1295-D: Deprecated declaration Pump_Off - give arg types
+../Drivers/Hardware/Pump.h(11): warning:  #1295-D: Deprecated declaration Pump_Off - give arg types
   void Pump_Off();
-..\Drivers\Hardware\PID.c(126): warning:  #1-D: last line of file ends without a newline
-  */
-..\Drivers\Hardware\PID.c: 3 warnings, 0 errors
+../Core/Src/main.c(150): warning:  #223-D: function "strlen" declared implicitly
+  				HAL_UART_Transmit(&huart6, (uint8_t*)cmd, strlen(cmd), HAL_MAX_DELAY);
+../Core/Src/main.c(145): warning:  #177-D: variable "humidity"  was declared but never referenced
+  				uint8_t humidity = Data[0];
+../Core/Src/main.c(146): warning:  #177-D: variable "temperature"  was declared but never referenced
+  				uint8_t temperature = Data[2];
+../Core/Src/main.c: 6 warnings, 0 errors
 linking...
-Program Size: Code=18782 RO-data=806 RW-data=40 ZI-data=2168  
+Program Size: Code=20634 RO-data=806 RW-data=44 ZI-data=2244  
 FromELF: creating hex file...
-"QS_Con_1\QS_Con_1.axf" - 0 Error(s), 3 Warning(s).
+"QS_Con_1\QS_Con_1.axf" - 0 Error(s), 6 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -61,7 +67,7 @@ Package Vendor: Keil
 <h2>Collection of Component Files used:</h2>
 
    * Component: ARM::CMSIS:CORE:5.0.1
-Build Time Elapsed:  00:00:15
+Build Time Elapsed:  00:00:04
 </pre>
 </body>
 </html>

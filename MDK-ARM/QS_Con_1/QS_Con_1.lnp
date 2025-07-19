@@ -4,6 +4,7 @@
 "qs_con_1\servo.o"
 "qs_con_1\pump.o"
 "qs_con_1\pid.o"
+"qs_con_1\dht11.o"
 "qs_con_1\main.o"
 "qs_con_1\gpio.o"
 "qs_con_1\tim.o"

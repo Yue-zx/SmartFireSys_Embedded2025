@@ -28,6 +28,7 @@
 #include "Pump.h"
 #include <stdio.h>
 #include "PID.h"
+#include "DHT11.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -63,6 +64,8 @@
 	uint8_t rx3[5];
 	
   static uint8_t flame_x = 60, flame_y = 84;
+	
+	extern uint8_t Data[5];
 	
 	
 /* USER CODE END PV */
@@ -115,6 +118,7 @@ int main(void)
   MX_USART2_UART_Init();
   MX_USART6_UART_Init();
   MX_USART3_UART_Init();
+  MX_TIM1_Init();
   /* USER CODE BEGIN 2 */
 	
 	Servo_Start();
@@ -134,6 +138,21 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
+		
+		
+		if(DHT_Read())
+			{
+				uint8_t humidity = Data[0];
+				uint8_t temperature = Data[2];
+
+				char cmd[50];
+				snprintf(cmd, sizeof(cmd), "page2.n1.val=%d%c%c%c", Data[2], 0xFF, 0xFF, 0xFF);
+				HAL_UART_Transmit(&huart6, (uint8_t*)cmd, strlen(cmd), HAL_MAX_DELAY);
+				
+				snprintf(cmd, sizeof(cmd), "page2.n0.val=%d%c%c%c", Data[0], 0xFF, 0xFF, 0xFF);
+				HAL_UART_Transmit(&huart6, (uint8_t*)cmd, strlen(cmd), HAL_MAX_DELAY);
+
+			}
 
 		if(frame6[7]==0x33)
 		{
