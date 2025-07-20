@@ -7,21 +7,29 @@ void PID_1D(uint8_t flame_x,uint16_t *current_compare_1D)
 {
 	const int16_t target_x = 64;
 	int16_t err1 = target_x - (int16_t)flame_x;
-	int16_t PID_Out1=0;
-	const uint16_t Kp = 1;
+	static int16_t last_err1 = 0;
+	float PID_Out1=0;
 	
-  PID_Out1=Kp*err1;
+	const float Kp = 1;
+	const float Kd = 0.3;
 	
-	if(err1<=2)
-	{
-		Pump_ON();
-	}
-	else if(err1>3)
-	{
-		void Pump_Off();
-	}
+	int16_t derivative = err1 - last_err1; 
 	
-	*current_compare_1D=*current_compare_1D+PID_Out1;
+  PID_Out1 = Kp * err1 + Kd * derivative;
+	
+	
+//	if(err1<=2)
+//	{
+//		Pump_ON();
+//	}
+//	else if(err1>3)
+//	{
+//		void Pump_Off();
+//	}
+	
+	*current_compare_1D=*current_compare_1D+(int16_t)PID_Out1;
+	
+	last_err1 = err1;
 	
 	if(*current_compare_1D<=840)
 	{
@@ -37,15 +45,23 @@ void PID_1D(uint8_t flame_x,uint16_t *current_compare_1D)
 
 void PID_2D(uint8_t flame_y,uint16_t *current_compare_2D)
 {
-	const int16_t target_y = 80;
+	const int16_t target_y = 70;
 	int16_t err2 = target_y - (int16_t)flame_y;
-	int16_t PID_Out2=0;
-	const uint16_t Kp = 1;
-	
-  PID_Out2=Kp*err2;
+	static int16_t last_err2 = 0;
+	float PID_Out2=0;
 	
 	
-	*current_compare_2D=*current_compare_2D+PID_Out2;
+	const float Kp = 1;
+	const float Kd = 0.3;
+	
+	int16_t derivative = err2 - last_err2;
+	
+  PID_Out2 = Kp * err2 + Kd * derivative;
+	
+	
+	*current_compare_2D=*current_compare_2D+(int16_t)PID_Out2;
+	
+	last_err2 = err2;
 	
 	if(*current_compare_2D<=1170)
 	{

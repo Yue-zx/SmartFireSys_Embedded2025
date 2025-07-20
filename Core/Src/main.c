@@ -62,11 +62,13 @@
 	uint8_t Pump;
 	
 	uint8_t rx3[5];
+	uint8_t tag=0;
+	uint8_t tag_1=0;
+	uint8_t tag_2=0;
 	
   static uint8_t flame_x = 60, flame_y = 84;
 	
 	extern uint8_t Data[5];
-	
 	
 /* USER CODE END PV */
 
@@ -119,6 +121,7 @@ int main(void)
   MX_USART6_UART_Init();
   MX_USART3_UART_Init();
   MX_TIM1_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
 	
 	Servo_Start();
@@ -139,24 +142,13 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 		
-		
-		if(DHT_Read())
-			{
-				uint8_t humidity = Data[0];
-				uint8_t temperature = Data[2];
 
-				char cmd[50];
-				snprintf(cmd, sizeof(cmd), "page2.n1.val=%d%c%c%c", Data[2], 0xFF, 0xFF, 0xFF);
-				HAL_UART_Transmit(&huart6, (uint8_t*)cmd, strlen(cmd), HAL_MAX_DELAY);
-				
-				snprintf(cmd, sizeof(cmd), "page2.n0.val=%d%c%c%c", Data[0], 0xFF, 0xFF, 0xFF);
-				HAL_UART_Transmit(&huart6, (uint8_t*)cmd, strlen(cmd), HAL_MAX_DELAY);
-
-			}
 
 		if(frame6[7]==0x33)
 		{
-			
+			current_compare_1D=1500;
+			current_compare_2D=1500;
+			Servo_Compare(current_compare_1D,current_compare_2D);
 		}
 		else if(frame6[7]==0x22)
 		{
@@ -186,10 +178,75 @@ int main(void)
 		}
 		else if(frame6[7]==0x11)
 			{
-				PID_1D(flame_x,&current_compare_1D);
-				PID_2D(flame_y,&current_compare_2D);
-		    HAL_Delay(200);
+				if(tag==1)
+				{
+					PID_1D(flame_x,&current_compare_1D);
+					PID_2D(flame_y,&current_compare_2D);
+					tag=0;
+					HAL_Delay(30);
+				}
+				else if(tag==0)
+				{
+					if(current_compare_1D>=1860)
+					{
+						tag_1=0;
+					}
+					else if(current_compare_1D<=1140)
+					{
+						tag_1=1;
+					}
+					
+					if(tag_1==0)
+					{
+						Servo_turn_right(&current_compare_1D);
+		  	    HAL_Delay(60);
+					}
+					else if(tag_1==1)
+					{
+						Servo_turn_left(&current_compare_1D);
+			      HAL_Delay(60);
+					}
+					
+					
+					if(current_compare_2D>=1530)
+					{
+						tag_2=0;
+					}
+					else if(current_compare_2D<=1270)
+					{
+						tag_2=1;
+					}
+					
+					if(tag_2==0)
+					{
+						Servo_turn_down(&current_compare_2D);
+		  	    HAL_Delay(50);
+					}
+					else if(tag_2==1)
+					{
+						Servo_turn_up(&current_compare_2D);
+			      HAL_Delay(50);
+					}
+
+				}
 			}
+		else if(frame6[7]==0x88)
+		{
+			
+			if(DHT_Read())
+			{
+				uint8_t humidity = Data[0];
+				uint8_t temperature = Data[2];
+
+				char cmd[50];
+				snprintf(cmd, sizeof(cmd), "page2.n1.val=%d%c%c%c", Data[2], 0xFF, 0xFF, 0xFF);
+				HAL_UART_Transmit(&huart6, (uint8_t*)cmd, strlen(cmd), HAL_MAX_DELAY);
+				
+				snprintf(cmd, sizeof(cmd), "page2.n0.val=%d%c%c%c", Data[0], 0xFF, 0xFF, 0xFF);
+				HAL_UART_Transmit(&huart6, (uint8_t*)cmd, strlen(cmd), HAL_MAX_DELAY);
+			}
+		}
+					
   }
   /* USER CODE END 3 */
 }
@@ -303,7 +360,8 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
 				if(rx3 [1]==0x3b)
 				{			
             flame_x=rx3[2];
-            flame_y=rx3[3];					
+            flame_y=rx3[3];	
+						tag=1;
 				}
 			}  	 	
        HAL_UART_Receive_IT(&huart3, rx3, 4);

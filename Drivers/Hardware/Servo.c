@@ -5,6 +5,12 @@ void Servo_Start()
 	TIM15_PWM_Start();
 }
 
+void Servo_Compare(uint16_t current_compare_1D,uint16_t current_compare_2D)
+{
+	TIM15_PWM_SetCompare1(current_compare_1D);
+	TIM15_PWM_SetCompare2(current_compare_2D);
+}
+
 void Servo_SetAngle(float Angle1[2])
 {
 	TIM15_PWM_SetCompare1(Angle1[0]/270*2000+500);
