@@ -67,6 +67,7 @@
 	uint8_t tag_1=0;
 	uint8_t tag_2=0;
 	uint8_t count=0;
+	uint16_t count_1=0;
 	
   static uint8_t flame_x = 60, flame_y = 84;
 	
@@ -264,6 +265,25 @@ int main(void)
 				
 				snprintf(cmd, sizeof(cmd), "page2.n0.val=%d%c%c%c", Data[0], 0xFF, 0xFF, 0xFF);
 				HAL_UART_Transmit(&huart6, (uint8_t*)cmd, strlen(cmd), HAL_MAX_DELAY);
+				
+				if(Data[2]>65)
+				{
+					count_1++;
+					if(count_1>=6)
+					{
+						HAL_GPIO_WritePin(GPIOE, GPIO_PIN_2, GPIO_PIN_SET);
+						count_1=8;
+					}
+					else
+					{
+						HAL_GPIO_WritePin(GPIOE, GPIO_PIN_2, GPIO_PIN_RESET);	
+					}				
+				}
+				else
+				{
+					HAL_GPIO_WritePin(GPIOE, GPIO_PIN_2, GPIO_PIN_SET);
+		      count_1=0;
+				}
 				
 				uint32_t now = HAL_GetTick();
 				
