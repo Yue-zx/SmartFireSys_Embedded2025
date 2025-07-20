@@ -37,3 +37,4 @@ qs_con_1\mqtt.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h
 qs_con_1\mqtt.o: ../Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart_ex.h
 qs_con_1\mqtt.o: D:\keil5\ARM\ARMCC\Bin\..\include\stdio.h
 qs_con_1\mqtt.o: D:\keil5\ARM\ARMCC\Bin\..\include\string.h
+qs_con_1\mqtt.o: ..\Drivers\Hardware\MQTT.h

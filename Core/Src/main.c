@@ -29,6 +29,7 @@
 #include <stdio.h>
 #include "PID.h"
 #include "DHT11.h"
+#include "MQTT.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -70,6 +71,15 @@
   static uint8_t flame_x = 60, flame_y = 84;
 	
 	extern uint8_t Data[5];
+	
+	char x[2]="x";
+  char password[9]="12121212";
+  char client_id[33]="43efe7b7661db39ee9d4b73038261ed4";
+  char a[1];
+  char topic1[12]= "Temperature";
+  char Temperature[3]; 
+  char topic2[9]= "Humidity";
+  char Humidity[3]; 
 	
 /* USER CODE END PV */
 
@@ -126,6 +136,8 @@ int main(void)
   /* USER CODE BEGIN 2 */
 	
 	Servo_Start();
+	
+	MQTT_Init(x, password, client_id);
 	
 	HAL_UART_Receive_IT(&huart2, &rxByte, 1);
 	
@@ -252,6 +264,14 @@ int main(void)
 				
 				snprintf(cmd, sizeof(cmd), "page2.n0.val=%d%c%c%c", Data[0], 0xFF, 0xFF, 0xFF);
 				HAL_UART_Transmit(&huart6, (uint8_t*)cmd, strlen(cmd), HAL_MAX_DELAY);
+				
+				uint32_t now = HAL_GetTick();
+				
+				snprintf(Temperature, sizeof(Temperature), "%d", Data[2]);
+        MQTT_update(topic1, Temperature);
+				
+				snprintf(Humidity, sizeof(Humidity), "%d", Data[0]);
+        MQTT_update(topic2, Humidity);
 			}
 		}
 					
