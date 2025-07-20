@@ -65,6 +65,7 @@
 	uint8_t tag=0;
 	uint8_t tag_1=0;
 	uint8_t tag_2=0;
+	uint8_t count=0;
 	
   static uint8_t flame_x = 60, flame_y = 84;
 	
@@ -187,6 +188,13 @@ int main(void)
 				}
 				else if(tag==0)
 				{
+					count++;
+					if(count>15)
+					{
+						Pump_Off();
+						count=0;
+					}
+
 					if(current_compare_1D>=1860)
 					{
 						tag_1=0;

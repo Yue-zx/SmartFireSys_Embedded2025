@@ -17,15 +17,10 @@ void PID_1D(uint8_t flame_x,uint16_t *current_compare_1D)
 	
   PID_Out1 = Kp * err1 + Kd * derivative;
 	
-	
-//	if(err1<=2)
-//	{
-//		Pump_ON();
-//	}
-//	else if(err1>3)
-//	{
-//		void Pump_Off();
-//	}
+	if(err1<=40)
+	{
+		Pump_ON();
+	}
 	
 	*current_compare_1D=*current_compare_1D+(int16_t)PID_Out1;
 	
